@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michael's Weather Channel</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Weather Dashboard</h1>
+        
+        <form id="search-Form">
+        <input type="text" id="city-input" placeholder="Enter a city"> 
+        <button type="submit">Search</button>
+        </form>
+    </header>
+
+  <main>
+    <section id="current-Conditions">
+        <h2>Current Weather</h2>
+        <div id="current-data">
+            <!-- Displays Current weather data here -->
+        </div>
+    </section>
+
+    <section id="Forecast">
+        <h2>Your 5-day Forecast</h2>
+        <div id="forecast-data">
+        <!-- Displays Forecast here -->
+        </div>
+    </section>
+
+    <section id="search-history">
+    <h2>Search History</h2>
+    <ul id="history-list">
+    <!-- Display search history is put here -->
+    </ul>
+    </section>
+  </main>
+
+   <script src="script.js"></script>
+ 
+   <script>
+
+    const apiKey = 'api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}';
+
+
+    document.getElementById('search-form').addEventListener('submit',function (e){
+    e.preventDefault();    
+    const city = document.getElementById('city-input').value;
+    getWeatherData(city);
+    });
+
+    async function getWeatherData(city) {
+        try {
+            const reponse = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`)
+            const forecastData = await forecastReponse.json();
+            displayForecast(forecastData);
+        } catch (error) {
+            console.log('Error grabbing your weather data:',error);
+        }
+     }
+     
+     function displayCurrentWeather(data) {
+        const city = data.name
+        const date = new Date(data.dt * 1000).toLocaleDateString();
+        const weatherIcon = data.waether[0].icon;
+        const teamperature = data.main.temp;
+        const humidity = data.wind.speed;
+
+        const currentData = document.getElementById('current-data')
+        currentData.innerHTML=`
+        <h3>${city}</h3>
+        <p>Date: ${date}</p>
+        <img src="http://openweathermap.org/img/w/${weatherIcon}.png" alt="Weather Icon">
+        <p>Temperature: ${temperature} K</p>
+        <p>Humidity: ${humidity} %</p>
+        <p>Wind Speed: ${windSpeed} m/s</p>
+      `;
+      
+      forecastData.forEach((forecast) => {
+        const date = new Data(forcecast.dt * 1000).toLocaleDateString();
+        const weatherIcon = forecast.weather[0].icon;
+        const temperature = forecast.main.temp;
+        const humidity = forecast.main.humidity;
+        const windSpeed = forecast.wind.speed;
+
+        const forecastCard = document.createElement('div');
+        forecastCard.classList.add('forecast-cast');
+        forecastCard.innerHTML=`
+          <h3>${date}</h3>
+          <img src="http://openweathermap.org/img/w/${weatherIcon}.png" alt="Weather Icon">
+          <p>Temperature: ${temperature} K</p>
+          <p>Humidity: ${humidity} %</p>
+          <p>Wind Speed: ${windSpeed} m/s</p>
+        `;
+
+        forecastContainter.appendChild(forecastCard);
+      });
+      }
+   </script>
+</body>
+</html>
